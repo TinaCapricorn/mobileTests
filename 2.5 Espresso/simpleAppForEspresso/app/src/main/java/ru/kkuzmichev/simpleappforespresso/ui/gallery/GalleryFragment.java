@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 import ru.kkuzmichev.simpleappforespresso.R;
 import ru.kkuzmichev.simpleappforespresso.databinding.FragmentGalleryBinding;
-
+import ru.kkuzmichev.simpleappforespresso.EspressoIdlingResources;
 public class GalleryFragment extends Fragment {
 
     private GalleryViewModel galleryViewModel;
@@ -44,7 +44,6 @@ public class GalleryFragment extends Fragment {
         progressBar = root.findViewById(R.id.progress_bar);
         recyclerView = root.findViewById(R.id.recycle_view);
         fakeLoadData();
-
         setLists();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(new GalleryAdapter(itemList));
@@ -59,6 +58,8 @@ public class GalleryFragment extends Fragment {
 
 
     private void fakeLoadData() {
+        EspressoIdlingResources.increment();
+
         progressBar.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.INVISIBLE);
         Handler handler = new Handler();
@@ -68,6 +69,8 @@ public class GalleryFragment extends Fragment {
                 {
                     progressBar.setVisibility(View.INVISIBLE);
                     recyclerView.setVisibility(View.VISIBLE);
+                    EspressoIdlingResources.decrement();
+
                 }
             }
         }, 1500);
